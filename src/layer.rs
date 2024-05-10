@@ -17,3 +17,8 @@ impl Layer {
     }
 }
 
+// Example usage:
+// let layer = Layer::new(5, 3); // for 5 neurons, each with 3 input connections
+// let inputs = vec![0.5, -0.1, 0.8];
+// let outputs = layer.forward(&inputs);
+
