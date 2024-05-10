@@ -1,12 +1,14 @@
 use rand::Rng;
 
+use std::f64::consts::E;
+
 pub struct Neuron {
-    weights: Vec<f64>, // A vector of weights for the inputs
-    bias: f64,         // The bias term
+    weights: Vec<f64>,
+    bias: f64,
 }
 
 impl Neuron {
-    // A method to create a new neuron with random weights and bias
+    // Creates a new neuron with random weights and bias
     pub fn new(input_size: usize) -> Self {
         let mut rng = rand::thread_rng();
         let weights = (0..input_size).map(|_| rng.gen_range(-1.0..1.0)).collect();
@@ -15,10 +17,21 @@ impl Neuron {
         Neuron { weights, bias }
     }
 
-    // A method for the forward pass which takes inputs and produces an output
+    // The sigmoid activation function
+    pub fn sigmoid(x: f64) -> f64 {
+        1.0 / (1.0 + E.powf(-x))
+    }
+
+    // Performs the forward pass with sigmoid activation
     pub fn forward(&self, inputs: &[f64]) -> f64 {
         assert_eq!(inputs.len(), self.weights.len());
-        inputs.iter().zip(self.weights.iter()).map(|(&input, &weight)| input * weight).sum::<f64>() + self.bias
+        let weighted_sum: f64 = inputs.iter().zip(self.weights.iter()).map(|(&input, &weight)| input * weight).sum();
+        Neuron::sigmoid(weighted_sum + self.bias)
     }
 }
+
+// Example usage:
+// let neuron = Neuron::new(3); // for 3 input connections
+// let inputs = vec![0.5, -0.1, 0.8];
+// let output = neuron.forward(&inputs);
 
